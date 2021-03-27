@@ -3,12 +3,54 @@
 #include <string>
 using namespace std;
 
-void drawSth() {
-	glColor3ub(255, 0, 0);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, 1.0f);
+void drawWalls() {
+	// Color source https://colorswall.com/palette/24609/
+	GLfloat edgeLength = 10.0f;
+
+	glBegin(GL_QUADS);
+	
+	// Top face -y
+	glColor3ub(119, 136, 153);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(edgeLength, 0.0f, 0.0f);
+	glVertex3f(edgeLength, 0.0f, edgeLength);
+	glVertex3f(0.0f, 0.0f, edgeLength);
+
+	// South face z
+	glColor3ub(133, 148, 163);
+	glVertex3f(0.0f, 0.0f, edgeLength);
+	glVertex3f(0.0f, edgeLength, edgeLength); 
+	glVertex3f(edgeLength, edgeLength, edgeLength);
+	glVertex3f(edgeLength, 0.0f, edgeLength);
+
+	// East face x
+	glColor3ub(146, 160, 173);
+	glVertex3f(edgeLength, 0.0f, edgeLength);
+	glVertex3f(edgeLength, edgeLength, edgeLength);
+	glVertex3f(edgeLength, edgeLength, 0.0f);
+	glVertex3f(edgeLength, 0.0f, 0.0f);
+
+	// North face -z
+	glColor3ub(160, 172, 184);
+	glVertex3f(edgeLength, 0.0f, 0.0f);
+	glVertex3f(edgeLength, edgeLength, 0.0f);
+	glVertex3f(0.0f, edgeLength, 0.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+
+	// West face -x
+	glColor3ub(173, 184, 194);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, edgeLength);
+	glVertex3f(0.0f, edgeLength, edgeLength);
+	glVertex3f(0.0f, edgeLength, 0.0f);
+
+	// Top face y
+	glColor3ub(187, 196, 204);
+	glVertex3f(0.0f, edgeLength, 0.0f);
+	glVertex3f(edgeLength, edgeLength, 0.0f);
+	glVertex3f(edgeLength, edgeLength, edgeLength);
+	glVertex3f(0.0f, edgeLength, edgeLength);
+
 	glEnd();
 }
 
@@ -75,14 +117,14 @@ void renderScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	// Put functions to draw here
-	drawAxes();
-	drawSth();
+	//drawAxes();
+	drawWalls();
 
 	glutSwapBuffers();
 	glLoadIdentity();
 
 	map<string, GLfloat> Eye = {
-		{"eyeX", 10.0f}, {"eyeY", 10.0f}, {"eyeZ", 10.0f},
+		{"eyeX", 5.0f}, {"eyeY", 5.0f}, {"eyeZ", 5.0f},
 		{"lookAtX", 0.0f}, {"lookAtY", 0.0f}, {"lookAtZ", 0.0f},
 		{"upX", 0.0f}, {"upY", 1.0f}, {"upZ", 0.0f}
 	};
@@ -100,19 +142,45 @@ void reshapeScene(int width, int height) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
+// This func is a para of glutKeyBoardFunc()
+void keyboard(unsigned char key, int x_mouse_pos, int y_mouse_pos) {
+	switch (key)
+	{
+	case 27: // ESC key
+		exit(0);
+		break;
+	default:
+		break;
+	}
+}
+
 
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
 
+	// Set color mode
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	
+	// Set window width, height
 	glutInitWindowSize(640, 640);
+
+	// Set window position
 	glutInitWindowPosition(0, 0);
+
+	// Set Set window name
 	glutCreateWindow("Particle Simulation");
 
+	// Pass a function to draw
 	glutDisplayFunc(renderScene);
+
+	// Keep that function alive
 	glutIdleFunc(renderScene);
 
+	// Pass a function to handle the change of window
 	glutReshapeFunc(reshapeScene);
+
+	// Pass functions to handle keyboard events
+	glutKeyboardFunc(keyboard);
 
 	glEnable(GL_DEPTH_TEST);
 
