@@ -3,9 +3,32 @@
 #include <string>
 using namespace std;
 
+map<string, GLfloat> Eye = {
+	{"eyeX", 5.0f}, {"eyeY", 5.0f}, {"eyeZ", 5.0f},
+	{"lookAtX", 0.0f}, {"lookAtY", 0.0f}, {"lookAtZ", 0.0f},
+	{"upX", 0.0f}, {"upY", 1.0f}, {"upZ", 0.0f}
+};
+
+// Cube's edge length also boundaries of Eye's positions
+GLfloat edgeLength = 10.0f;
+
+void limitEyePosition() {
+	GLfloat lowerBoundary = 0.1f;
+	GLfloat upperBoundary = edgeLength - lowerBoundary;
+
+	// Set lower boundary for x, y, z
+	if (Eye["eyeX"] < lowerBoundary) Eye["eyeX"] = lowerBoundary;
+	if (Eye["eyeY"] < lowerBoundary) Eye["eyeY"] = lowerBoundary;
+	if (Eye["eyeZ"] < lowerBoundary) Eye["eyeZ"] = lowerBoundary;
+	
+	// Set upper boundary for x, y, z
+	if (Eye["eyeX"] > upperBoundary) Eye["eyeX"] = upperBoundary;
+	if (Eye["eyeY"] > upperBoundary) Eye["eyeY"] = upperBoundary;
+	if (Eye["eyeZ"] > upperBoundary) Eye["eyeZ"] = upperBoundary;
+}
+
 void drawWalls() {
 	// Color source https://colorswall.com/palette/24609/
-	GLfloat edgeLength = 10.0f;
 
 	glBegin(GL_QUADS);
 	
@@ -123,12 +146,7 @@ void renderScene() {
 	glutSwapBuffers();
 	glLoadIdentity();
 
-	map<string, GLfloat> Eye = {
-		{"eyeX", 5.0f}, {"eyeY", 5.0f}, {"eyeZ", 5.0f},
-		{"lookAtX", 0.0f}, {"lookAtY", 0.0f}, {"lookAtZ", 0.0f},
-		{"upX", 0.0f}, {"upY", 1.0f}, {"upZ", 0.0f}
-	};
-
+	limitEyePosition();
 	gluLookAt(Eye["eyeX"], Eye["eyeY"], Eye["eyeZ"],
 		Eye["lookAtX"], Eye["lookAtY"], Eye["lookAtZ"],
 		Eye["upX"], Eye["upY"], Eye["upZ"]);
