@@ -16,13 +16,13 @@ GLfloat edgeLength = 10.0f;
 
 // Create prototypic sphere
 // Its id is always -1
-Particle ps = Particle(make_tuple(4.0f, 4.0f, 4.0f),
+Particle ps = Particle(make_tuple(5.0f, 5.0f, 5.0f),
 						make_tuple(224, 17, 95), 0.1f, -1);
 
-void limitEyePosition() {
-	GLfloat lowerBoundary = 0.1f;
-	GLfloat upperBoundary = edgeLength - lowerBoundary;
+GLfloat lowerBoundary = 0.1f;
+GLfloat upperBoundary = edgeLength - lowerBoundary;
 
+void limitEyePosition() {
 	// Set lower boundary for x, y, z
 	if (Eye["posX"] < lowerBoundary) Eye["posX"] = lowerBoundary;
 	if (Eye["posY"] < lowerBoundary) Eye["posY"] = lowerBoundary;
@@ -84,21 +84,6 @@ void drawWalls() {
 	glEnd();
 }
 
-void drawProtypicSphere() {
-	glTranslatef(0.0f, 0.0f, 0.0f);
-	glPushMatrix();
-
-	glColor3ub(get<0>(ps.getColor()), 
-				get<1>(ps.getColor()), 
-				get<2>(ps.getColor()));
-
-	glTranslatef(get<0>(ps.getPosition()), 
-					get<1>(ps.getPosition()), 
-					get<2>(ps.getPosition()));
-
-	glutSolidSphere(ps.getRadius(), 16, 32);
-	glPopMatrix();
-}
 
 void renderScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -106,12 +91,18 @@ void renderScene() {
 	// Put functions to draw here
 	//drawAxes();
 	drawWalls();
-	drawProtypicSphere();
+	ps.draw();
+	ps.move(lowerBoundary, upperBoundary);
 
 	glutSwapBuffers();
 	glLoadIdentity();
 
 	limitEyePosition();
+
+	Eye["lookAtX"] = get<0>(ps.getPosition());
+	Eye["lookAtY"] = get<1>(ps.getPosition());
+	Eye["lookAtZ"] = get<2>(ps.getPosition());
+
 	gluLookAt(Eye["posX"], Eye["posY"], Eye["posZ"],
 		Eye["lookAtX"], Eye["lookAtY"], Eye["lookAtZ"],
 		Eye["upX"], Eye["upY"], Eye["upZ"]);
