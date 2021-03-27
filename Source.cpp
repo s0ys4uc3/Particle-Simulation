@@ -4,7 +4,7 @@
 using namespace std;
 
 map<string, GLfloat> Eye = {
-	{"eyeX", 5.0f}, {"eyeY", 5.0f}, {"eyeZ", 5.0f},
+	{"posX", 5.0f}, {"posY", 5.0f}, {"posZ", 5.0f},
 	{"lookAtX", 0.0f}, {"lookAtY", 0.0f}, {"lookAtZ", 0.0f},
 	{"upX", 0.0f}, {"upY", 1.0f}, {"upZ", 0.0f}
 };
@@ -17,14 +17,14 @@ void limitEyePosition() {
 	GLfloat upperBoundary = edgeLength - lowerBoundary;
 
 	// Set lower boundary for x, y, z
-	if (Eye["eyeX"] < lowerBoundary) Eye["eyeX"] = lowerBoundary;
-	if (Eye["eyeY"] < lowerBoundary) Eye["eyeY"] = lowerBoundary;
-	if (Eye["eyeZ"] < lowerBoundary) Eye["eyeZ"] = lowerBoundary;
+	if (Eye["posX"] < lowerBoundary) Eye["posX"] = lowerBoundary;
+	if (Eye["posY"] < lowerBoundary) Eye["posY"] = lowerBoundary;
+	if (Eye["posZ"] < lowerBoundary) Eye["posZ"] = lowerBoundary;
 	
 	// Set upper boundary for x, y, z
-	if (Eye["eyeX"] > upperBoundary) Eye["eyeX"] = upperBoundary;
-	if (Eye["eyeY"] > upperBoundary) Eye["eyeY"] = upperBoundary;
-	if (Eye["eyeZ"] > upperBoundary) Eye["eyeZ"] = upperBoundary;
+	if (Eye["posX"] > upperBoundary) Eye["posX"] = upperBoundary;
+	if (Eye["posY"] > upperBoundary) Eye["posY"] = upperBoundary;
+	if (Eye["posZ"] > upperBoundary) Eye["posZ"] = upperBoundary;
 }
 
 void drawWalls() {
@@ -147,7 +147,7 @@ void renderScene() {
 	glLoadIdentity();
 
 	limitEyePosition();
-	gluLookAt(Eye["eyeX"], Eye["eyeY"], Eye["eyeZ"],
+	gluLookAt(Eye["posX"], Eye["posY"], Eye["posZ"],
 		Eye["lookAtX"], Eye["lookAtY"], Eye["lookAtZ"],
 		Eye["upX"], Eye["upY"], Eye["upZ"]);
 
