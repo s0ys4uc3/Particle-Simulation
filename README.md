@@ -4,7 +4,7 @@
 
 Clone this project
 ```bash
-git clone https://github.com/stratzilla/particle-sim.git
+git clone https://github.com/dinhanhx/Particle-Simulation.git
 ```
 Get all dependencies with [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows)
 ```
@@ -16,7 +16,7 @@ Then open this project with Visual Studio, build with `Release x86`
 
 Clone this project
 ```bash
-git clone https://github.com/stratzilla/particle-sim.git
+git clone https://github.com/dinhanhx/Particle-Simulation.git
 ```
 Ignore Visual Studio meta files.
 
