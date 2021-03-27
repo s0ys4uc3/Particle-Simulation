@@ -1,6 +1,8 @@
 #include<GL/glut.h>
 #include<map>
-#include <string>
+#include<string>
+#include<tuple>
+#include"Particle.h"
 using namespace std;
 
 map<string, GLfloat> Eye = {
@@ -11,6 +13,11 @@ map<string, GLfloat> Eye = {
 
 // Cube's edge length also boundaries of Eye's positions
 GLfloat edgeLength = 10.0f;
+
+// Create prototypic sphere
+// Its id is always -1
+Particle ps = Particle(make_tuple(4.0f, 4.0f, 4.0f),
+						make_tuple(224, 17, 95), 0.1f, -1);
 
 void limitEyePosition() {
 	GLfloat lowerBoundary = 0.1f;
@@ -77,62 +84,19 @@ void drawWalls() {
 	glEnd();
 }
 
-void drawAxes() {
-	GLfloat axisLength = 5.0f;
-
+void drawProtypicSphere() {
+	glTranslatef(0.0f, 0.0f, 0.0f);
 	glPushMatrix();
 
-	// red X
-	glColor3ub(255, 0, 0);
-	glBegin(GL_LINES);
-		
-		// x axis
-		glVertex3f(-axisLength, 0.0f, 0.0f);
-		glVertex3f(axisLength, 0.0f, 0.0f);
+	glColor3ub(get<0>(ps.getColor()), 
+				get<1>(ps.getColor()), 
+				get<2>(ps.getColor()));
 
-		// arrow x
-		glVertex3f(axisLength, 0.0f, 0.0f);
-		glVertex3f(axisLength - 1.0f, 1.0f, 0.0f);
-		glVertex3f(axisLength, 0.0f, 0.0f);
-		glVertex3f(axisLength - 1.0f, -1.0f, 0.0f);
+	glTranslatef(get<0>(ps.getPosition()), 
+					get<1>(ps.getPosition()), 
+					get<2>(ps.getPosition()));
 
-	glEnd();
-	glFlush();
-
-	// green y
-	glColor3ub(0, 255, 0);
-	glBegin(GL_LINES);
-
-		// y axis
-		glVertex3f(0.0f, -axisLength, 0.0f);
-		glVertex3f(0.0f, axisLength, 0.0f);
-		
-		// arrow y
-		glVertex3f(0.0f, axisLength, 0.0f);
-		glVertex3f(1.0f, axisLength - 1.0f, 0.0f);
-		glVertex3f(0.0f, axisLength, 0.0f);
-		glVertex3f(-1.0f, axisLength - 1.0f, 0.0f);
-
-	glEnd();
-	glFlush();
-
-	// blue z
-	glColor3ub(0, 0, 255);
-	glBegin(GL_LINES);
-
-		// z axis
-		glVertex3f(0.0f, 0.0f, -axisLength);
-		glVertex3f(0.0f, 0.0f, axisLength);
-
-		// arrow z
-		glVertex3f(0.0f, 0.0f, axisLength);
-		glVertex3f(0.0f, 1.0f, axisLength - 1.0f);
-		glVertex3f(0.0f, 0.0f, axisLength);
-		glVertex3f(0.0f, -1.0f, axisLength - 1.0f);
-
-	glEnd();
-	glFlush();
-
+	glutSolidSphere(ps.getRadius(), 16, 32);
 	glPopMatrix();
 }
 
@@ -142,6 +106,7 @@ void renderScene() {
 	// Put functions to draw here
 	//drawAxes();
 	drawWalls();
+	drawProtypicSphere();
 
 	glutSwapBuffers();
 	glLoadIdentity();
