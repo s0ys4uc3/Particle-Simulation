@@ -20,6 +20,7 @@ public:
 		this->radius = radius;
 		this->id = id;
 
+		// Assign random velocity for x, y, z
 		srand(static_cast <unsigned> (time(0)));
 		float LO = 0.000f;
 		float HI = 0.010f;
@@ -29,12 +30,13 @@ public:
 		velocity = make_tuple(x_vec, y_vec, z_vec);
 	}
 
-
+	// Get functions
 	tuple <float, float, float> getPosition() { return position; }
 	tuple <unsigned short, unsigned short, unsigned short> getColor() { return color; }
 	float getRadius() { return radius; }
 	int getId() { return id; }
 
+	// Draw a solid sphere
 	void draw()
 	{
 		glTranslatef(0.0f, 0.0f, 0.0f);
@@ -52,6 +54,7 @@ public:
 		glPopMatrix();
 	}
 
+	// Move the sphere under circumstances
 	void move(GLfloat lowerBoundary, GLfloat upperBoundary) {
 		// bouncing x
 		if (get<0>(position) > upperBoundary || get<0>(position) < lowerBoundary) get<0>(velocity) = -1.0f * get<0>(velocity);

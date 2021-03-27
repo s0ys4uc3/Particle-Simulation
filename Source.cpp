@@ -5,6 +5,7 @@
 #include"Particle.h"
 using namespace std;
 
+// Initialize the Eye
 map<string, GLfloat> Eye = {
 	{"posX", 5.0f}, {"posY", 5.0f}, {"posZ", 5.0f},
 	{"lookAtX", 0.0f}, {"lookAtY", 0.0f}, {"lookAtZ", 0.0f},
@@ -14,10 +15,10 @@ map<string, GLfloat> Eye = {
 // Cube's edge length also boundaries of Eye's positions
 GLfloat edgeLength = 10.0f;
 
-// Create prototypic sphere
-// Its id is always -1
-Particle ps = Particle(make_tuple(5.0f, 5.0f, 5.0f),
-						make_tuple(224, 17, 95), 0.1f, -1);
+// Create a sphere
+// Its id is always 1
+Particle ps = Particle(make_tuple(2.5f, 2.5f, 2.5f),
+						make_tuple(224, 17, 95), 0.1f, 1);
 
 GLfloat lowerBoundary = 0.1f;
 GLfloat upperBoundary = edgeLength - lowerBoundary;
@@ -88,8 +89,7 @@ void drawWalls() {
 void renderScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	// Put functions to draw here
-	//drawAxes();
+	// Put functions to draw and to move objects here
 	drawWalls();
 	ps.draw();
 	ps.move(lowerBoundary, upperBoundary);
@@ -99,6 +99,7 @@ void renderScene() {
 
 	limitEyePosition();
 
+	// This will make the eye follow the sphere
 	Eye["lookAtX"] = get<0>(ps.getPosition());
 	Eye["lookAtY"] = get<1>(ps.getPosition());
 	Eye["lookAtZ"] = get<2>(ps.getPosition());
