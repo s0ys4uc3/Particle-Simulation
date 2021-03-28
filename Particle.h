@@ -1,8 +1,12 @@
 #pragma once
 #include <tuple>
 #include <GL/glut.h>
+#include <GL/GLU.h>
 #include <time.h>
 using namespace std;
+
+GLUquadricObj* quadricObj = gluNewQuadric();
+
 class Particle
 {
 private:
@@ -20,7 +24,6 @@ public:
 		this->radius = radius;
 		this->id = id;
 
-		// Assign random velocity for x, y, z
 		srand(static_cast <unsigned> (time(0)));
 		float LO = 0.000f;
 		float HI = 0.010f;
@@ -30,14 +33,13 @@ public:
 		velocity = make_tuple(x_vec, y_vec, z_vec);
 	}
 
-	// Get functions
+
 	tuple <float, float, float> getPosition() { return position; }
 	tuple <unsigned short, unsigned short, unsigned short> getColor() { return color; }
 	float getRadius() { return radius; }
 	int getId() { return id; }
 
-	// Draw a solid sphere
-	void draw()
+	void draw(GLuint tex)
 	{
 		glTranslatef(0.0f, 0.0f, 0.0f);
 		glPushMatrix();
@@ -49,12 +51,16 @@ public:
 		glTranslatef(get<0>(position),
 			get<1>(position),
 			get<2>(position));
+		gluQuadricDrawStyle(quadricObj, GLU_FILL);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		gluQuadricTexture(quadricObj, GL_TRUE);
+		gluQuadricNormals(quadricObj, GLU_SMOOTH);
+		gluSphere(quadricObj, radius, 16, 32);
+		//glutSolidSphere(radius, 16, 32);
 
-		glutSolidSphere(radius, 16, 32);
 		glPopMatrix();
 	}
 
-	// Move the sphere under circumstances
 	void move(GLfloat lowerBoundary, GLfloat upperBoundary) {
 		// bouncing x
 		if (get<0>(position) > upperBoundary || get<0>(position) < lowerBoundary) get<0>(velocity) = -1.0f * get<0>(velocity);
@@ -72,5 +78,6 @@ public:
 		// move z
 		get<2>(position) = get<2>(position) + get<2>(velocity);
 	}
+
 };
 
